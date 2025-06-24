@@ -1,6 +1,24 @@
 import React, { useRef, useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
+// Keyframes
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`
+
+const shine = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+`
+
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`
+
+// Styled Components
 const GalleryContainer = styled.div`
   min-height: 100vh;
   padding: 6rem 2rem;
@@ -8,77 +26,127 @@ const GalleryContainer = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background-color: var(--background-color);
+  background: linear-gradient(45deg, #0a0a0a, #1a1a1a);
+  perspective: 1000px;
+  overflow: hidden;
 `
 
 const Title = styled.h2`
   font-size: 3rem;
   margin-bottom: 3rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   position: relative;
   display: inline-block;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -10px;
-    width: 100%;
-    height: 3px;
-    background-color: var(--primary-color);
-  }
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: ${shine} 3s linear infinite, ${float} 4s ease-in-out infinite;
+  will-change: background-position, transform;
 
   @media (max-width: 768px) {
     font-size: 2rem;
-    margin-bottom: 2rem;
   }
 `
 
 const SectionTitle = styled.h3`
   font-size: 2.5rem;
-  margin: 2rem 0;
-  color: var(--primary-color);
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-  
-  @media (max-width: 768px) {
-    font-size: 1.8rem;
-    margin: 1.5rem 0;
+  margin: 4rem 0;
+  color: #fff;
+  position: relative;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  animation: ${fadeIn} 1s ease-out;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #ff6b6b);
+    background-size: 200% auto;
+    transition: width 0.3s ease, background-position 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
+    background-position: 100% 0;
   }
 `
 
 const GalleryCarousel = styled.div`
   display: flex;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   overflow-x: hidden;
   position: relative;
-  padding: 1rem 0;
+  padding: 3rem 0;
   cursor: grab;
   
   &:active {
     cursor: grabbing;
   }
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 200px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &::before {
+    left: 0;
+    background: linear-gradient(90deg, rgba(10,10,10,1), rgba(10,10,10,0));
+  }
+
+  &::after {
+    right: 0;
+    background: linear-gradient(90deg, rgba(10,10,10,0), rgba(10,10,10,1));
+  }
 `
 
 const ImageContainer = styled.div`
   display: flex;
-  transition: transform 0.5s ease;
-  user-select: none;
+  gap: 40px;
+  padding: 0 20px;
+  will-change: transform;
 `
 
 const ImageCard = styled.div`
   flex: 0 0 auto;
-  width: 350px;
-  height: 350px;
-  margin-right: 20px;
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
+  width: 400px;
+  height: 400px;
+  border-radius: 20px;
   overflow: hidden;
-  transition: transform 0.3s ease;
-  user-select: none;
-  
+  position: relative;
+  transform-style: preserve-3d;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  will-change: transform, box-shadow;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1;
+    border-radius: 20px;
+  }
+
   &:hover {
-    transform: scale(1.05);
+    box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.4);
   }
 `
 
@@ -86,218 +154,218 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  user-select: none;
-  -webkit-user-drag: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
 `
 
+const HoverOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
 
+  ${ImageCard}:hover & {
+    opacity: 1;
+  }
+`
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+`
+
+const ModalContent = styled.div`
+  max-width: 90%;
+  max-height: 90%;
+  position: relative;
+
+  img {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
+  p {
+    color: white;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    opacity: 0.8;
+  }
+`
 
 const Gallery = () => {
-  const thenCarouselRef = useRef(null)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const thenContainerRef = useRef(null)
-  const nowCarouselRef = useRef(null)
   const nowContainerRef = useRef(null)
-  const [isDraggingThen, setIsDraggingThen] = useState(false)
-  const [isDraggingNow, setIsDraggingNow] = useState(false)
-  const [startXThen, setStartXThen] = useState(0)
-  const [startXNow, setStartXNow] = useState(0)
-  const [scrollLeftThen, setScrollLeftThen] = useState(0)
-  const [scrollLeftNow, setScrollLeftNow] = useState(0)
   const [thenImages, setThenImages] = useState([])
   const [nowImages, setNowImages] = useState([])
-  
-  // Load images from Then and Now directories
+  const isScrollingPaused = useRef(false)
+
+  // Handle keyboard navigation
   useEffect(() => {
-    // Load Then images
-    const thenImageModules = import.meta.glob('/src/assets/Then/*.jpg')
-    
-    const loadThenImages = async () => {
-      const imagePromises = Object.entries(thenImageModules).map(async ([path, importFn], index) => {
-        const module = await importFn()
-        return {
-          id: index + 1,
-          src: module.default,
-          // Extract filename from path for alt text
-          alt: path.split('/').pop().replace('.jpg', '')
-        }
-      })
-      
-      const loadedImages = await Promise.all(imagePromises)
-      setThenImages(loadedImages)
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setSelectedImage(null)
     }
-    
-    // Load Now images
-    const nowImageModules = import.meta.glob('/src/assets/Now/*.jpg')
-    
-    const loadNowImages = async () => {
-      const imagePromises = Object.entries(nowImageModules).map(async ([path, importFn], index) => {
-        const module = await importFn()
-        return {
-          id: index + 1,
-          src: module.default,
-          // Extract filename from path for alt text
-          alt: path.split('/').pop().replace('.jpg', '')
-        }
-      })
-      
-      const loadedImages = await Promise.all(imagePromises)
-      setNowImages(loadedImages)
-    }
-    
-    loadThenImages()
-    loadNowImages()
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  // Mouse event handlers for Then carousel
-  const handleThenMouseDown = (e) => {
-    setIsDraggingThen(true)
-    setStartXThen(e.pageX - thenContainerRef.current.offsetLeft)
-    setScrollLeftThen(thenContainerRef.current.scrollLeft)
-  }
-
-  const handleThenMouseMove = (e) => {
-    if (!isDraggingThen) return
-    e.preventDefault()
-    const x = e.pageX - thenContainerRef.current.offsetLeft
-    const walk = (x - startXThen) * 2 // Scroll speed multiplier
-    thenContainerRef.current.scrollLeft = scrollLeftThen - walk
-  }
-
-  const handleThenMouseUp = () => {
-    setIsDraggingThen(false)
-  }
-
-  const handleThenMouseLeave = () => {
-    setIsDraggingThen(false)
-  }
-  
-  // Mouse event handlers for Now carousel
-  const handleNowMouseDown = (e) => {
-    setIsDraggingNow(true)
-    setStartXNow(e.pageX - nowContainerRef.current.offsetLeft)
-    setScrollLeftNow(nowContainerRef.current.scrollLeft)
-  }
-
-  const handleNowMouseMove = (e) => {
-    if (!isDraggingNow) return
-    e.preventDefault()
-    const x = e.pageX - nowContainerRef.current.offsetLeft
-    const walk = (x - startXNow) * 2 // Scroll speed multiplier
-    nowContainerRef.current.scrollLeft = scrollLeftNow - walk
-  }
-
-  const handleNowMouseUp = () => {
-    setIsDraggingNow(false)
-  }
-
-  const handleNowMouseLeave = () => {
-    setIsDraggingNow(false)
-  }
-
-  // Auto-scroll effect for Then carousel
+  // Auto-scroll with pause
   useEffect(() => {
-    const container = thenContainerRef.current
-    if (!container) return
+    const containers = [thenContainerRef.current, nowContainerRef.current]
+    let animationFrame
 
-    let animationId
-    let scrollAmount = 1 // Pixels to scroll per frame
-
-    const scroll = () => {
-      if (isDraggingThen) {
-        cancelAnimationFrame(animationId)
-        return
-      }
-
-      container.scrollLeft += scrollAmount
-      
-      // Reset scroll position when reaching the end
-      if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-        container.scrollLeft = 0
-      }
-      
-      animationId = requestAnimationFrame(scroll)
+    const animate = () => {
+      containers.forEach(container => {
+        if (container && !isScrollingPaused.current) {
+          container.scrollLeft += 0.5
+          if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
+            container.scrollLeft = 0
+          }
+        }
+      })
+      animationFrame = requestAnimationFrame(animate)
     }
 
-    animationId = requestAnimationFrame(scroll)
+    animate()
+    return () => cancelAnimationFrame(animationFrame)
+  }, [])
 
-    return () => {
-      cancelAnimationFrame(animationId)
-    }
-  }, [isDraggingThen])
-
-  // Auto-scroll effect for Now carousel
+  // Load images with proper static paths
   useEffect(() => {
-    const container = nowContainerRef.current
-    if (!container) return
+    const loadImages = async () => {
+      try {
+        // Load Then images
+        const thenModules = import.meta.glob('/src/assets/Then/*.{jpg,jpeg,png}')
+        const thenLoaded = await Promise.all(
+          Object.entries(thenModules).map(async ([path, importer]) => {
+            const module = await importer()
+            return { 
+              src: module.default, 
+              alt: path.split('/').pop().replace(/\.[^/.]+$/, '') 
+            }
+          })
+        )
+        setThenImages(thenLoaded)
 
-    let animationId
-    let scrollAmount = 1 // Pixels to scroll per frame
-
-    const scroll = () => {
-      if (isDraggingNow) {
-        cancelAnimationFrame(animationId)
-        return
+        // Load Now images
+        const nowModules = import.meta.glob('/src/assets/Now/*.{jpg,jpeg,png}')
+        const nowLoaded = await Promise.all(
+          Object.entries(nowModules).map(async ([path, importer]) => {
+            const module = await importer()
+            return { 
+              src: module.default, 
+              alt: path.split('/').pop().replace(/\.[^/.]+$/, '') 
+            }
+          })
+        )
+        setNowImages(nowLoaded)
+      } catch (error) {
+        console.error('Error loading images:', error)
       }
-
-      container.scrollLeft += scrollAmount
-      
-      // Reset scroll position when reaching the end
-      if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-        container.scrollLeft = 0
-      }
-      
-      animationId = requestAnimationFrame(scroll)
     }
 
-    animationId = requestAnimationFrame(scroll)
+    loadImages()
+  }, [])
 
-    return () => {
-      cancelAnimationFrame(animationId)
-    }
-  }, [isDraggingNow])
+  // Card interaction handlers
+  const handleCardMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width * 100
+    const y = (e.clientY - rect.top) / rect.height * 100
+    e.currentTarget.style.setProperty('--mouse-x', `${x}%`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}%`)
+    
+    const rotateX = (y - 50) * 0.5
+    const rotateY = (x - 50) * -0.5
+    e.currentTarget.style.transform = `translateZ(20px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
+  }
+
+  const handleCardLeave = (e) => {
+    e.currentTarget.style.transform = 'translateZ(0) rotateX(0) rotateY(0)'
+  }
 
   return (
     <GalleryContainer id="gallery">
-      <Title>Gallery</Title>
-      
-      {/* Then section */}
-      <SectionTitle>Then</SectionTitle>
-      <GalleryCarousel
+      <Title>Evolution Gallery</Title>
+
+      {/* Then Section */}
+      <SectionTitle>The Past</SectionTitle>
+      <GalleryCarousel 
         ref={thenContainerRef}
-        onMouseDown={handleThenMouseDown}
-        onMouseMove={handleThenMouseMove}
-        onMouseUp={handleThenMouseUp}
-        onMouseLeave={handleThenMouseLeave}
+        onMouseEnter={() => isScrollingPaused.current = true}
+        onMouseLeave={() => isScrollingPaused.current = false}
       >
-        <ImageContainer ref={thenCarouselRef}>
-          {thenImages.map(image => (
-            <ImageCard key={image.id}>
-              <Image src={image.src} alt={`Then image ${image.id}`} />
+        <ImageContainer>
+          {thenImages.map((image, index) => (
+            <ImageCard 
+              key={index}
+              onMouseMove={handleCardMove}
+              onMouseLeave={handleCardLeave}
+              onClick={() => setSelectedImage(image)}
+            >
+              <Image src={image.src} alt={image.alt} loading="lazy" />
+              <HoverOverlay />
             </ImageCard>
           ))}
         </ImageContainer>
       </GalleryCarousel>
-      
-      {/* Now section */}
-      <SectionTitle>Now</SectionTitle>
-      <GalleryCarousel
+
+      {/* Now Section */}
+      <SectionTitle>The Present</SectionTitle>
+      <GalleryCarousel 
         ref={nowContainerRef}
-        onMouseDown={handleNowMouseDown}
-        onMouseMove={handleNowMouseMove}
-        onMouseUp={handleNowMouseUp}
-        onMouseLeave={handleNowMouseLeave}
+        onMouseEnter={() => isScrollingPaused.current = true}
+        onMouseLeave={() => isScrollingPaused.current = false}
       >
-        <ImageContainer ref={nowCarouselRef}>
-          {nowImages.map(image => (
-            <ImageCard key={image.id}>
-              <Image src={image.src} alt={`Now image ${image.id}`} />
+        <ImageContainer>
+          {nowImages.map((image, index) => (
+            <ImageCard 
+              key={index}
+              onMouseMove={handleCardMove}
+              onMouseLeave={handleCardLeave}
+              onClick={() => setSelectedImage(image)}
+            >
+              <Image src={image.src} alt={image.alt} loading="lazy" />
+              <HoverOverlay />
             </ImageCard>
           ))}
         </ImageContainer>
       </GalleryCarousel>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <ModalOverlay onClick={() => setSelectedImage(null)}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <img src={selectedImage.src} alt={selectedImage.alt} />
+            <p>{selectedImage.alt}</p>
+          </ModalContent>
+        </ModalOverlay>
+      )}
     </GalleryContainer>
   )
 }

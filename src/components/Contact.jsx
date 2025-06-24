@@ -1,7 +1,34 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useEffect } from 'react'
+import styled, { keyframes } from 'styled-components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faPhone, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
+
+// Animations
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+`
+
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+`
+
+const slideInLeft = keyframes`
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
+`
+
+const slideInRight = keyframes`
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+`
+
+const scaleUp = keyframes`
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+`
 
 const ContactContainer = styled.div`
   min-height: 100vh;
@@ -11,12 +38,14 @@ const ContactContainer = styled.div`
   align-items: center;
   text-align: center;
   background-color: var(--background-color);
+  overflow: hidden;
 `
 
 const Title = styled.h2`
   font-size: 3rem;
   margin-bottom: 3rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: ${fadeIn} 1s ease-out, ${float} 4s ease-in-out infinite;
 
   @media (max-width: 768px) {
     font-size: 2rem;
@@ -34,6 +63,7 @@ const ContactContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  animation: ${scaleUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 `
 
 const ContactInfo = styled.div`
@@ -42,6 +72,16 @@ const ContactInfo = styled.div`
   gap: 1rem;
   padding: 1rem;
   border-bottom: 1px solid var(--primary-color);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateX(${props => props.direction === 'left' ? '-50px' : '50px'});
+  animation: ${props => props.direction === 'left' ? slideInLeft : slideInRight} 0.6s forwards;
+  animation-delay: ${props => props.delay * 0.2}s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+  }
 
   &:last-child {
     border-bottom: none;
@@ -52,6 +92,11 @@ const IconWrapper = styled.div`
   font-size: 2rem;
   color: var(--primary-color);
   width: 40px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
 `
 
 const InfoText = styled.div`
@@ -79,6 +124,7 @@ const CommitteeMembers = styled.div`
   border-radius: 8px;
   max-width: 800px;
   width: 100%;
+  animation: ${scaleUp} 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 `
 
 const CommitteeTitle = styled.h3`
@@ -101,6 +147,16 @@ const MemberCard = styled.div`
   padding: 1rem;
   border: 1px solid var(--primary-color);
   border-radius: 4px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: ${fadeIn} 0.6s forwards;
+  animation-delay: ${props => props.delay * 0.2}s;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.1);
+  }
 `
 
 const MemberName = styled.h4`
@@ -122,11 +178,28 @@ const Contact = () => {
     { name: 'Emily Davis', role: 'Communications' }
   ]
 
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <ContactContainer id="contact">
       <Title>Contact Us</Title>
       <ContactContent>
-        <ContactInfo>
+        <ContactInfo direction="left" delay={0} className="animate-on-scroll">
           <IconWrapper>
             <FontAwesomeIcon icon={faEnvelope} />
           </IconWrapper>
@@ -136,7 +209,7 @@ const Contact = () => {
           </InfoText>
         </ContactInfo>
 
-        <ContactInfo>
+        <ContactInfo direction="right" delay={1} className="animate-on-scroll">
           <IconWrapper>
             <FontAwesomeIcon icon={faPhone} />
           </IconWrapper>
@@ -146,7 +219,7 @@ const Contact = () => {
           </InfoText>
         </ContactInfo>
 
-        <ContactInfo>
+        <ContactInfo direction="left" delay={2} className="animate-on-scroll">
           <IconWrapper>
             <FontAwesomeIcon icon={faMapMarkerAlt} />
           </IconWrapper>
@@ -161,11 +234,11 @@ const Contact = () => {
         </ContactInfo>
       </ContactContent>
 
-      <CommitteeMembers>
+      <CommitteeMembers className="animate-on-scroll">
         <CommitteeTitle>Reunion Committee</CommitteeTitle>
         <MembersList>
           {committeeMembers.map((member, index) => (
-            <MemberCard key={index}>
+            <MemberCard key={index} delay={index} className="animate-on-scroll">
               <MemberName>{member.name}</MemberName>
               <MemberRole>{member.role}</MemberRole>
             </MemberCard>

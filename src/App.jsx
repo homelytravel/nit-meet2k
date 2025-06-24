@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Link } from 'react-scroll'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faTimes } from '@fortawesome/free-solid-svg-icons'
@@ -17,46 +17,118 @@ const NavBar = styled.nav`
   top: 0;
   left: 0;
   right: 0;
-  background-color: var(--background-color);
-  padding: 1rem;
+  background-color: rgba(26, 26, 26, 0.97);
+  backdrop-filter: blur(12px);
+  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   z-index: 1000;
   border-bottom: 2px solid var(--primary-color);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  opacity: 1;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+
+  &.hidden {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `
 
 const Logo = styled.div`
   font-family: 'Montserrat', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    opacity: 0.9;
+    transform: translateX(2px);
+  }
 `
 
 const NavLinks = styled.div`
   display: flex;
   gap: 2rem;
+  align-items: center;
 
   @media (max-width: 768px) {
-    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
     position: fixed;
     top: 60px;
     left: 0;
     right: 0;
     background-color: var(--background-color);
     flex-direction: column;
-    padding: 2rem;
-    gap: 1rem;
+    padding: 1.5rem;
+    gap: 1.5rem;
     border-bottom: 2px solid var(--primary-color);
+    transform: ${({ isOpen }) => isOpen ? 'translateY(0) scaleY(1)' : 'translateY(-20%) scaleY(0.8)'};
+    opacity: ${({ isOpen }) => isOpen ? 1 : 0};
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.2s ease,
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: top center;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    pointer-events: ${({ isOpen }) => isOpen ? 'all' : 'none'};
   }
 `
 
 const NavLink = styled(Link)`
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.5rem;
+  border-radius: 4px;
+  position: relative;
   
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   &:hover {
     color: #fff;
+    transform: translateY(-3px);
+
+    &::after {
+      width: 100%;
+      left: 0;
+    }
+  }
+
+  &.active {
+    color: #fff;
+    font-weight: 600;
+
+    &::after {
+      width: 100%;
+      left: 0;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.1rem;
+    transform: ${({ isOpen }) => isOpen ? 'translateY(0)' : 'translateY(-15px)'};
+    opacity: ${({ isOpen }) => isOpen ? 1 : 0};
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${({ index }) => index * 0.06}s;
   }
 `
 
@@ -65,201 +137,83 @@ const MenuButton = styled.button`
   background: none;
   border: none;
   color: var(--primary-color);
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(0deg);
+  
+  &:hover {
+    background: rgba(255, 215, 0, 0.15);
+    transform: scale(1.15);
+  }
 
   @media (max-width: 768px) {
     display: block;
   }
+
+  ${({ isOpen }) => isOpen && css`
+    transform: rotate(90deg);
+  `}
 `
 
-const LoginButton = styled.button`
+const AuthButton = styled.button`
   background-color: var(--primary-color);
   color: var(--background-color);
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-weight: bold;
-  transition: all 0.3s ease;
+  padding: 0.7rem 1.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      120deg,
+      transparent,
+      rgba(255, 255, 255, 0.15),
+      transparent
+    );
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   &:hover {
-    background-color: #fff;
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+
+    &::before {
+      left: 100%;
+    }
   }
-`
 
-const LoginModal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-`
-
-const ModalContent = styled.div`
-  background-color: var(--background-color);
-  padding: 2rem;
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
-  max-width: 400px;
-  width: 90%;
-`
-
-const ModalTitle = styled.h2`
-  font-size: 2rem;
-  color: var(--primary-color);
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-family: 'Montserrat', sans-serif;
-`
-
-const ModalForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`
-
-const ModalInput = styled.input`
-  padding: 0.8rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
-  color: var(--text-color);
-  font-family: 'Poppins', sans-serif;
-
-  &:focus {
-    outline: none;
-    border-color: #fff;
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   }
-`
 
-const ModalButton = styled.button`
-  background-color: var(--primary-color);
-  color: var(--background-color);
-  border: none;
-  padding: 0.8rem;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #fff;
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 1.2rem;
+    margin-top: 1rem;
+    font-size: 1.1rem;
   }
-`
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: var(--primary-color);
-  font-size: 1.5rem;
-  cursor: pointer;
-
-  &:hover {
-    color: #fff;
-  }
-`
-
-const ErrorMessage = styled.p`
-  color: #ff4444;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
 `
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [showLoginModal, setShowLoginModal] = useState(false)
-  const [isLogin, setIsLogin] = useState(true)
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  })
-  const [error, setError] = useState('')
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
-  
-  useEffect(() => {
-    // Check for active session on load
-    const getSession = async () => {
-      const { data, error } = await supabase.auth.getSession()
-      if (data.session) {
-        setUser(data.session.user)
-      }
-      setLoading(false)
-    }
-    
-    getSession()
-    
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user || null)
-      }
-    )
-    
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setError('')
-
-    // Basic validation
-    if (!formData.email || !formData.password) {
-      setError('Please fill in all fields')
-      return
-    }
-
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long')
-      return
-    }
-    
-    try {
-      if (isLogin) {
-        // Handle login
-        const { error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password
-        })
-        
-        if (error) throw error
-      } else {
-        // Handle signup
-        const { error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password
-        })
-        
-        if (error) throw error
-      }
-      
-      // Close modal on success
-      setShowLoginModal(false)
-      setFormData({ email: '', password: '' })
-    } catch (error) {
-      setError(error.message || 'An error occurred during authentication')
-    }
-  }
-
-  const toggleAuthMode = () => {
-    setIsLogin(!isLogin)
-    setError('')
-  }
 
   const sections = [
     { id: 'home', title: 'Home' },
@@ -271,78 +225,70 @@ const App = () => {
     { id: 'contact', title: 'Contact' }
   ]
 
+  useEffect(() => {
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession()
+      setUser(data?.session?.user || null)
+      setLoading(false)
+    }
+    
+    getSession()
+    
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user || null)
+      }
+    )
+    
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const handleAuth = async () => {
+    if (user) {
+      await supabase.auth.signOut()
+    } else {
+      await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      })
+    }
+  }
+
   return (
     <>
       <NavBar>
         <Link to="home" smooth={true} duration={500}>
           <Logo>NIT Rourkela 2000</Logo>
         </Link>
-        <MenuButton onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <MenuButton 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          isOpen={isMenuOpen}
+        >
           <FontAwesomeIcon icon={isMenuOpen ? faTimes : faBars} />
         </MenuButton>
         <NavLinks isOpen={isMenuOpen}>
-          {sections.map(section => (
+          {sections.map((section, index) => (
             <NavLink
               key={section.id}
               to={section.id}
               smooth={true}
               duration={500}
               onClick={() => setIsMenuOpen(false)}
+              spy={true}
+              activeClass="active"
+              index={index}
+              isOpen={isMenuOpen}
             >
               {section.title}
             </NavLink>
           ))}
-          {/*{user ? (
-            <LoginButton onClick={async () => {
-              await supabase.auth.signOut()
-            }}>
-              Logout
-            </LoginButton>
-          ) : (
-            <LoginButton onClick={() => setShowLoginModal(true)}>
-              Login / Signup
-            </LoginButton>
-          )}*/}
+          <AuthButton onClick={handleAuth}>
+            {user ? 'Logout' : 'Login'}
+          </AuthButton>
         </NavLinks>
       </NavBar>
-
-      <LoginModal isOpen={showLoginModal}>
-        <ModalContent>
-          <CloseButton onClick={() => {
-            setShowLoginModal(false)
-            setError('')
-            setFormData({ email: '', password: '' })
-          }}>
-            <FontAwesomeIcon icon={faTimes} />
-          </CloseButton>
-          <ModalTitle>{isLogin ? 'Login' : 'Create Account'}</ModalTitle>
-          <ModalForm onSubmit={handleSubmit}>
-            <ModalInput
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-            <ModalInput
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleInputChange}
-              required
-            />
-            {error && <ErrorMessage>{error}</ErrorMessage>}
-            <ModalButton type="submit">
-              {isLogin ? 'Login' : 'Sign Up'}
-            </ModalButton>
-            <ModalButton type="button" onClick={toggleAuthMode}>
-              {isLogin ? 'Create Account' : 'Back to Login'}
-            </ModalButton>
-          </ModalForm>
-        </ModalContent>
-      </LoginModal>
 
       <Home />
       <WhenWhere />
