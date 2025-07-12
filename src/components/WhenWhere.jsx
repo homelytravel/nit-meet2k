@@ -35,7 +35,6 @@ const WhenWhereContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
   background-image: url('https://images.shiksha.com/mediadata/images/1607331935php7vaw4G.jpeg');
   background-size: cover;
@@ -47,10 +46,7 @@ const WhenWhereContainer = styled.div`
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.85);
     z-index: 0;
   }
@@ -58,8 +54,7 @@ const WhenWhereContainer = styled.div`
   &::after {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 80%;
     height: 80%;
@@ -88,57 +83,43 @@ const ContentContainer = styled.div`
   max-width: 1200px;
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  gap: 4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
   padding: 3rem;
   position: relative;
   z-index: 2;
-  opacity: 0;
   animation: ${scaleUp} 1s forwards;
   animation-delay: 0.3s;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 3rem;
     padding: 2rem;
   }
 `
 
 const InfoSection = styled.div`
   flex: 1;
-  padding: 3rem 2rem;
+  min-width: 300px;
+  padding: 2.5rem 2rem;
   background: rgba(0, 0, 0, 0.6);
   border: 2px solid var(--primary-color);
   border-radius: 15px;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transform: translateY(30px);
   animation: ${slideIn} 0.8s forwards;
-  animation-delay: ${props => props.delay}s;
+  animation-delay: ${props => props.delay || 0}s;
 
   &:hover {
     transform: translateY(-10px);
     box-shadow: 0 15px 30px rgba(255,215,0,0.2);
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
-    min-height: auto;
-    padding: 2rem;
   }
 `
 
 const InfoTitle = styled.h3`
   font-size: 2rem;
   color: var(--primary-color);
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   position: relative;
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
 
   &::after {
     content: '';
@@ -146,30 +127,27 @@ const InfoTitle = styled.h3`
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
+    width: 60px;
     height: 3px;
     background: var(--primary-color);
     border-radius: 2px;
   }
-
-  @media (max-width: 768px) {
-    font-size: 1.8rem;
-  }
 `
 
 const InfoText = styled.p`
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 1.8;
   color: var(--text-color);
-  margin: 1rem 0;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: ${fadeIn} 0.6s forwards;
-  animation-delay: ${props => props.delay}s;
+  margin: 0.6rem 0;
+`
 
-  @media (max-width: 768px) {
-    font-size: 1.1rem;
-  }
+const ScheduleList = styled.ul`
+  list-style-type: disc;
+  text-align: left;
+  padding-left: 1.2rem;
+  color: var(--text-color);
+  font-size: 1.1rem;
+  line-height: 1.7;
 `
 
 const WhenWhere = () => {
@@ -191,19 +169,29 @@ const WhenWhere = () => {
   return (
     <WhenWhereContainer id="when-where">
       <Title className="animate-element">When & Where</Title>
-      
+
       <ContentContainer className="animate-element">
         <InfoSection delay={0.4} className="animate-element">
           <InfoTitle>When</InfoTitle>
-          <InfoText delay={0.6}>Friday, December 26th, 2025</InfoText>
-          <InfoText delay={0.8}>6:00 PM - 11:00 PM</InfoText>
+          <InfoText>Thursday, December 26th, 2025</InfoText>
+          <InfoText>2:00 PM onwards</InfoText>
         </InfoSection>
 
         <InfoSection delay={0.6} className="animate-element">
           <InfoTitle>Where</InfoTitle>
-          <InfoText delay={0.8}>NIT Rourkela Campus</InfoText>
-          <InfoText delay={1.0}>Sector 1</InfoText>
-          <InfoText delay={1.2}>Rourkela, Odisha 769008</InfoText>
+          <InfoText>NIT Rourkela Campus</InfoText>
+          <InfoText>Sector 1, Rourkela</InfoText>
+          <InfoText>Odisha - 769008</InfoText>
+        </InfoSection>
+
+        <InfoSection delay={0.8} className="animate-element">
+          <InfoTitle>Schedule</InfoTitle>
+          <ScheduleList>
+            <li><strong>Dec 26 (2 PM onwards):</strong> Meet & greet followed by dinner</li>
+            <li><strong>Dec 27 (Morning):</strong> Formal event at AV Hall (NITR) followed by lunch</li>
+            <li><strong>Dec 27 (Evening):</strong> Cultural evening & gala dinner at hotel ballroom</li>
+            <li><strong>Dec 28:</strong> Farewell breakfast & TBD</li>
+          </ScheduleList>
         </InfoSection>
       </ContentContainer>
     </WhenWhereContainer>

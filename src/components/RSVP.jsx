@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import styled, { keyframes } from 'styled-components'
-import { supabase } from '../supabaseClient'
+import React, { useState, useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { supabase } from '../supabaseClient';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -16,291 +16,324 @@ const pulse = keyframes`
   0% { transform: scale(1); }
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
-`
+  `;
 
 const RSVPContainer = styled.div`
-  min-height: 100vh;
-  padding: 6rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  background-color: var(--background-color);
+  padding: 4rem 4rem;
+  background: #fff;
+  color: #333;
   animation: ${fadeIn} 0.8s ease-out;
-`
+  font-family: 'Segoe UI', sans-serif;
+`;
+
+const HeaderContent = styled.div`
+  text-align: center;
+`;
 
 const Title = styled.h2`
-  font-size: 3rem;
-  margin-bottom: 3rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #000;
   animation: ${fadeIn} 0.8s ease-out forwards;
-  opacity: 0;
+`;
+
+const Subtitle = styled.div`
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+`;
+
+const Note = styled.div`
+  font-size: 1rem;
+  color: red;
+  margin-bottom: 2rem;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
   @media (max-width: 768px) {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
   }
-`
+`;
 
-const Form = styled.form`
-  max-width: 600px;
+const LeftContent = styled.div`
+  flex: 1;
+  min-width: 300px;
+`;
+
+const Table = styled.table`
+  border-collapse: collapse;
   width: 100%;
+  margin-bottom: 1rem;
+
+  th, td {
+    border: 1px solid #ccc;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  th {
+    background-color: #222;
+    color: white;
+  }
+`;
+
+const Caption = styled.div`
+  font-size: 0.9rem;
+  color: #666;
+`;
+
+const List = styled.ol`
+  padding-left: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.6;
+`;
+
+const Disclaimer = styled.p`
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  color: #666;
+`;
+
+const RightForm = styled.form`
+  flex: 1;
+  min-width: 300px;
+  background: #f9f9f9;
   padding: 2rem;
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid #ddd;
   animation: ${scaleUp} 0.6s ease-out forwards;
   opacity: 0;
-`
+`;
 
 const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5rem;
-  opacity: 0;
+  position: relative;
   animation: ${fadeIn} 0.6s ease-out forwards;
   animation-delay: ${props => props.delay || '0.3s'};
-`
+  margin-bottom: 1.5rem;
+`;
 
 const Label = styled.label`
-  font-size: 1.2rem;
-  color: var(--primary-color);
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  margin-left: 0.5rem;
-`
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  background: #f9f9f9;
+  padding: 0 0.25rem;
+  transition: 0.2s;
+  pointer-events: none;
+  font-size: 0.95rem;
+`;
 
 const Input = styled.input`
   width: 100%;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
-  color: var(--text-color);
-  font-family: 'Poppins', sans-serif;
+  padding: 1rem 0.75rem 0.25rem;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: transparent;
 
-  &:focus {
-    outline: none;
-    border-color: #fff;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-    transform: scale(1.02);
+  &:focus + ${Label},
+  &:not(:placeholder-shown) + ${Label} {
+    top: 0;
+    transform: translateY(-50%) scale(0.85);
+    background: #f9f9f9;
+    color: #333;
   }
-`
+`;
 
 const Select = styled.select`
   width: 100%;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid var(--primary-color);
-  border-radius: 8px;
-  color: var(--text-color);
-  font-family: 'Poppins', sans-serif;
+  padding: 1rem 0.75rem 0.25rem;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: transparent;
 
-  &:focus {
-    outline: none;
-    border-color: #fff;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-    transform: scale(1.02);
+   &:focus + ${Label},
+  &:not(:placeholder-shown) + ${Label} {
+    top: 0;
+    transform: translateY(-50%) scale(0.85);
+    background: #f9f9f9;
+    color: #333;
   }
+`;
 
-  option {
-    background: var(--background-color);
+const InputRow = styled.div`
+  display: flex;
+  gap: 1rem;
+  > * {
+    flex: 1;
   }
-`
+`;
 
 const SubmitButton = styled.button`
-  background: linear-gradient(45deg, var(--primary-color), #ff6b6b);
-  color: var(--background-color);
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  background-color: #fbbc05;
   border: none;
-  padding: 1.2rem 2.5rem;
-  border-radius: 50px;
-  font-size: 1.2rem;
+  border-radius: 5px;
+  color: #000;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
-  position: relative;
-  overflow: hidden;
   animation: ${pulse} 2s infinite;
-
   &:hover {
-    animation: none;
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+    background-color: #eccb73ff;
   }
-
-  &:active {
-    transform: scale(0.95);
-  }
-
-  &:disabled {
-    background: #666;
-    cursor: not-allowed;
-    transform: none;
-    animation: none;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 300px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    transition: transform 0.5s ease;
-  }
-
-  &:hover::after {
-    transform: translate(-50%, -50%) scale(1);
-  }
-`
+`;
 
 const Message = styled.p`
-  color: ${props => props.error ? '#ff4444' : '#4CAF50'};
   font-size: 1rem;
+  color: ${props => props.error ? 'red' : 'green'};
   margin-top: 1rem;
-  padding: 1rem;
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.3);
   animation: ${fadeIn} 0.6s ease-out;
-`
+`;
 
 const RSVP = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    attendance: 'yes',
-    guests: '0'
-  })
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [user, setUser] = useState(null)
-  
+    rollNumber: '', name: '', email: '', country: '', state: '', city: '',
+    phonePrefix: '+91', phone: '', whatsapp: '', registrationType: 'Individual only'
+  });
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [user, setUser] = useState(null);
+
   useEffect(() => {
     const getUser = async () => {
-      const { data } = await supabase.auth.getUser()
-      setUser(data.user)
-      if (data.user) {
-        setFormData(prev => ({ ...prev, email: data.user.email }))
-      }
+      const { data } = await supabase.auth.getUser();
+      setUser(data.user);
+      if (data.user) setFormData(prev => ({ ...prev, email: data.user.email }));
     }
-    getUser()
-  }, [])
+    getUser();
+  }, []);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setMessage('')
-    setError('')
-    setIsSubmitting(true)
-
+    e.preventDefault();
+    setMessage(''); setError(''); setIsSubmitting(true);
     try {
-      const { error } = await supabase
-        .from('rsvps')
-        .insert([{ 
-          ...formData,
-          guests: parseInt(formData.guests),
-          user_id: user?.id
-        }])
-
-      if (error) throw error
-
-      setMessage('Thank you for your RSVP! 🎉 We look forward to seeing you.')
-      setFormData({
-        name: '',
-        email: user?.email || '',
-        attendance: 'yes',
-        guests: '0'
-      })
+      const { error } = await supabase.from('registrations').insert([{ ...formData, user_id: user?.id }]);
+      if (error) throw error;
+      setMessage('🎉 Registration successful!');
+      setFormData({ rollNumber: '', name: '', email: user?.email || '', country: '', state: '', city: '', phonePrefix: '+91', phone: '', whatsapp: '', registrationType: 'Individual only' });
     } catch (err) {
-      console.error('Error submitting RSVP:', err)
-      setError('❌ There was an error submitting your RSVP. Please try again.')
+      setError('❌ Failed to register. Please try again later.');
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
   return (
     <RSVPContainer id="rsvp">
-      <Title>RSVP</Title>
-      
-      <Form onSubmit={handleSubmit}>
-        <FormGroup delay="0.3s">
-          <Label htmlFor="name">Full Name</Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
+      <HeaderContent>
+        <Title>RSVP</Title>
+        <Subtitle>
+          Don’t miss the 2000 Silver Jubilee event! <strong>Register now</strong> to secure your spot and confirm your rsvp by making a payment.
+        </Subtitle>
+        <Note>
+          We understand that plans can change. That’s why we offer a full refund if you need to cancel your rsvp until September 30th.
+        </Note>
+      </HeaderContent>
 
-        <FormGroup delay="0.4s">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </FormGroup>
+      <ContentWrapper>
+        <LeftContent>
+          <Table>
+            <thead>
+              <tr><th>RSVP Type</th><th>Charges</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Individual only (Without family)</td><td>₹23,000</td></tr>
+              <tr><td>With Family (Spouse + Kids)</td><td>₹30,000</td></tr>
+            </tbody>
+          </Table>
+          <Caption>
+            Alumni donating/contributing more than ₹50,000 can pay "Individual Only (without family)" rsvp fee for their family rsvp and they do not need to pay "With Family (spouse + kids)" rsvp fee.
+          </Caption>
+          <Subtitle>The rsvp fee covers the following</Subtitle>
+          <List>
+            <li>Food and non-alcoholic beverages for Dec 22nd evening through Dec 24th lunch.</li>
+            <li>Cultural and Entertainment activities for Dec 22nd and Dec 23rd.</li>
+            <li>Stage setup, photography, party hall rental, music systems, orchestra, etc.</li>
+            <li>Souvenirs and gifts for registered Alumni.</li>
+            <li>Teacher felicitations, and other memorabilia.</li>
+            <li>RSVP kit which includes lanyard with name tag, ID card for NITR campus visit, goodie bag and event itinerary.</li>
+            <li>Transportation and logistics to and from hotel to venue/NIT Rourkela from Dec 22nd through Dec 24th</li>
+          </List>
+          <Disclaimer>The fee does not include accommodation.</Disclaimer>
+        </LeftContent>
 
-        <FormGroup delay="0.5s">
-          <Label htmlFor="attendance">Will you attend?</Label>
-          <Select
-            id="attendance"
-            name="attendance"
-            value={formData.attendance}
-            onChange={handleChange}
-          >
-            <option value="yes">Yes, I will attend</option>
-            <option value="no">No, I cannot attend</option>
-            <option value="maybe">Maybe</option>
-          </Select>
-        </FormGroup>
+        <RightForm onSubmit={handleSubmit}>
+          <FormGroup>
+            <Input name="rollNumber" value={formData.rollNumber} onChange={handleChange} required placeholder=" " />
+            <Label htmlFor="rollNumber">REC Roll Number</Label>
+          </FormGroup>
+          <FormGroup>
+            <Input name="name" value={formData.name} onChange={handleChange} required placeholder=" " />
+            <Label htmlFor="name">Name</Label>
+          </FormGroup>
+          <FormGroup>
+            <Input name="email" value={formData.email} onChange={handleChange} required placeholder=" " />
+            <Label htmlFor="email">Email Address</Label>
+          </FormGroup>
+          <InputRow>
+            <FormGroup>
+              <Input name="country" value={formData.country} onChange={handleChange} required placeholder=" " />
+              <Label htmlFor="country">Country</Label>
+            </FormGroup>
+            <FormGroup>
+              <Input name="state" value={formData.state} onChange={handleChange} placeholder=" " />
+              <Label htmlFor="state">State</Label>
+            </FormGroup>
+            <FormGroup>
+              <Input name="city" value={formData.city} onChange={handleChange} placeholder=" " />
+              <Label htmlFor="city">City</Label>
+            </FormGroup>
+          </InputRow>
+          
+          <InputRow>
+            <FormGroup>
+              <Input name="phonePrefix" value={formData.phonePrefix} onChange={handleChange} required placeholder=" " />
+              <Label>Prefex</Label>
+            </FormGroup>
+            <FormGroup>
+              <Input name="phone" value={formData.phone} onChange={handleChange} required placeholder=" " />
+              <Label>Phone Number</Label>
+            </FormGroup>
+            <FormGroup>
+              <Input name="whatsapp" value={formData.whatsapp} onChange={handleChange} required placeholder=" " />
+              <Label htmlFor="whatsapp">WhatsApp Number</Label>
+            </FormGroup>
+          </InputRow>
 
-        <FormGroup delay="0.6s">
-          <Label htmlFor="guests">Number of Additional Guests</Label>
-          <Select
-            id="guests"
-            name="guests"
-            value={formData.guests}
-            onChange={handleChange}
-          >
-            {[0, 1, 2, 3, 4].map(num => (
-              <option key={num} value={num}>{num}</option>
-            ))}
-          </Select>
-        </FormGroup>
-
-        {message && <Message>{message}</Message>}
-        {error && <Message error>{error}</Message>}
-
-        <SubmitButton type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Sending... ✈️' : 'Submit RSVP 🎉'}
-        </SubmitButton>
-      </Form>
+          <FormGroup>
+            <Select name="registrationType" value={formData.registrationType} onChange={handleChange} required>
+              <option value="Individual only">Individual only (₹23,000)</option>
+              <option value="With Family">With Family (₹30,000)</option>
+            </Select>
+            <Label htmlFor="registrationType">RSVP Type</Label>
+          </FormGroup>
+          <Caption style={{ color: '#000' }}>
+            The "Individual Only" and "With Family" rsvp fee is discounted by about 60% to allow increased attendance – actual cost is about ₹50,000. Please contribute generously.
+          </Caption>
+          {message && <Message>{message}</Message>}
+          {error && <Message error>{error}</Message>}
+          <SubmitButton type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Registering...' : 'Register'}
+          </SubmitButton>
+        </RightForm>
+      </ContentWrapper>
     </RSVPContainer>
-  )
-}
+  );
+};
 
-export default RSVP
+export default RSVP;

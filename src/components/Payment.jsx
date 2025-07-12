@@ -1,260 +1,192 @@
-import React, { useEffect } from 'react'
-import styled, { keyframes } from 'styled-components'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCreditCard, faMoneyBill, faQrcode } from '@fortawesome/free-solid-svg-icons'
+ import React, { useEffect } from 'react';
+import styled, { keyframes } from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUniversity, faQrcode, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
-// New Animations
+// Animations
 const cardEntrance = keyframes`
   0% { opacity: 0; transform: perspective(1000px) rotateX(90deg) scale(0.5); }
   100% { opacity: 1; transform: perspective(1000px) rotateX(0deg) scale(1); }
-`
+`;
 
 const neonPulse = keyframes`
   0% { filter: drop-shadow(0 0 2px var(--primary-color)); }
   50% { filter: drop-shadow(0 0 8px var(--primary-color)); }
   100% { filter: drop-shadow(0 0 2px var(--primary-color)); }
-`
+`;
 
 const gradientFlow = keyframes`
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-`
+`;
 
+// Styled Components
 const PaymentContainer = styled.div`
   min-height: 100vh;
-  padding: 8rem 2rem;
+  padding: 6rem 2rem;
+  background: linear-gradient(45deg, #0a0a0a, #1e1e1e, #0a0a0a);
+  background-size: 400% 400%;
+  animation: ${gradientFlow} 15s ease infinite;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(45deg, 
-    var(--background-color) 0%, 
-    rgba(0,0,0,0.9) 50%, 
-    var(--background-color) 100%
-  );
-  background-size: 400% 400%;
-  animation: ${gradientFlow} 15s ease infinite;
-  position: relative;
-  overflow: hidden;
-`
+  color: var(--text-color);
+`;
 
 const Title = styled.h2`
   font-size: 3rem;
-  margin-bottom: 4rem;
-  position: relative;
+  margin-bottom: 3rem;
   text-transform: uppercase;
-  letter-spacing: 2px;
   animation: ${neonPulse} 2s infinite;
+  position: relative;
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
     width: 60%;
     height: 3px;
     background: var(--primary-color);
-    border-radius: 2px;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
   }
+`;
 
-  @media (max-width: 768px) {
-    font-size: 2rem;
+const EmailInstruction = styled.div`
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  background: rgba(255,255,255,0.05);
+  padding: 1.2rem 2rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+  animation: ${cardEntrance} 1s ease forwards;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  svg {
+    color: var(--primary-color);
+    font-size: 1.5rem;
   }
-`
+`;
 
 const PaymentGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(280px, 1fr));
-  gap: 3rem;
-  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   width: 100%;
-  padding: 2rem;
-  position: relative;
+  max-width: 800px;
+  margin-bottom: 3rem;
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
   }
-`
+`;
 
 const PaymentCard = styled.div`
-  background: rgba(0, 0, 0, 0.7);
+  flex: 1;
+  background: rgba(0, 0, 0, 0.6);
   border: 2px solid var(--primary-color);
-  border-radius: 12px;
-  padding: 2.5rem;
+  border-radius: 10px;
+  padding: 2rem;
+  position: relative;
+  animation: ${cardEntrance} 1s ease forwards;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  opacity: 0;
-  animation: ${cardEntrance} 1s forwards;
-  animation-delay: ${props => props.delay * 0.3}s;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-      45deg,
-      transparent,
-      rgba(255,215,0,0.1),
-      transparent
-    );
-    animation: ${gradientFlow} 6s linear infinite;
-    z-index: 0;
-  }
-
-  &:hover {
-    transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
-    box-shadow: 0 20px 40px rgba(255,215,0,0.2);
-  }
-`
+`;
 
 const IconWrapper = styled.div`
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: var(--primary-color);
   margin-bottom: 1rem;
-  position: relative;
-  z-index: 1;
-  transition: all 0.4s ease;
-
-  ${PaymentCard}:hover & {
-    transform: scale(1.2) rotateY(360deg);
-  }
-`
+`;
 
 const CardTitle = styled.h3`
-  font-size: 1.8rem;
-  color: var(--primary-color);
+  font-size: 1.5rem;
   margin-bottom: 1rem;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-`
+`;
 
 const CardContent = styled.div`
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: var(--text-color);
-  position: relative;
-  z-index: 1;
+  font-size: 1rem;
   text-align: center;
-`
 
-const PaymentDetails = styled.div`
-  margin-top: 4rem;
-  padding: 2.5rem;
-  background: rgba(0, 0, 0, 0.7);
-  border: 2px solid var(--primary-color);
-  border-radius: 12px;
-  max-width: 800px;
-  width: 100%;
-  position: relative;
-  opacity: 0;
-  animation: ${cardEntrance} 1s forwards;
-  animation-delay: 1s;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(255,215,0,0.1) 10px,
-      rgba(255,215,0,0.1) 20px
-    );
-    z-index: 0;
+  p {
+    margin: 0.4rem 0;
   }
-`
-
-const DetailItem = styled.p`
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: var(--text-color);
-  margin-bottom: 1.2rem;
-  position: relative;
-  z-index: 1;
-  opacity: 0;
-  transform: translateX(-50px);
-  animation: ${cardEntrance} 0.6s forwards;
-  animation-delay: ${props => props.delay * 0.2 + 1.2}s;
 
   strong {
     color: var(--primary-color);
-    animation: ${neonPulse} 2s infinite;
   }
-`
+`;
+
+const QRImage = styled.img`
+  margin-top: 1rem;
+  width: 180px;
+  border-radius: 8px;
+`;
 
 const Payment = () => {
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.style.opacity = 1
-          entry.target.style.transform = 'translateY(0)'
+          entry.target.style.opacity = 1;
+          entry.target.style.transform = 'translateY(0)';
         }
-      })
-    }, { threshold: 0.1 })
+      });
+    }, { threshold: 0.1 });
 
-    document.querySelectorAll('.animate-payment').forEach(el => observer.observe(el))
-    
-    return () => observer.disconnect()
-  }, [])
+    document.querySelectorAll('.animate-payment').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <PaymentContainer id="payment">
-      <Title className="animate-payment">Payment Options</Title>
-      
-      <PaymentGrid>
-        <PaymentCard delay={0} className="animate-payment">
-          <IconWrapper>
-            <FontAwesomeIcon icon={faCreditCard} />
-          </IconWrapper>
-          <CardTitle>Credit Card</CardTitle>
-          <CardContent>
-            Secure online payment via credit or debit card through our encrypted payment gateway.
-          </CardContent>
-        </PaymentCard>
+      <Title className="animate-payment">Payment</Title>
 
-        <PaymentCard delay={1} className="animate-payment">
+      <EmailInstruction className="animate-payment">
+        <FontAwesomeIcon icon={faEnvelope} />
+        <span>Send an email to <strong>nitry2k@gmail.com</strong> with screenshot of your payment.</span>
+      </EmailInstruction>
+
+      <PaymentGrid>
+        {/* Bank Transfer */}
+        <PaymentCard className="animate-payment">
           <IconWrapper>
-            <FontAwesomeIcon icon={faMoneyBill} />
+            <FontAwesomeIcon icon={faUniversity} />
           </IconWrapper>
           <CardTitle>Bank Transfer</CardTitle>
           <CardContent>
-            Direct NEFT/RTGS transfers to our official reunion account with instant confirmation.
+            <p><strong>Bank:</strong> State Bank of India</p>
+            <p><strong>Account Name:</strong> NIT Rourkela 2000 Alumni</p>
+            <p><strong>Account Number:</strong> 41728775160</p>
+            <p><strong>IFSC:</strong> SBIN0002109</p>
+            <p><strong>MICR:</strong> 769002007</p>
+            <p><strong>Branch Code:</strong> 002109</p>
           </CardContent>
         </PaymentCard>
 
-        <PaymentCard delay={2} className="animate-payment">
+        {/* UPI QR Payment */}
+        <PaymentCard className="animate-payment">
           <IconWrapper>
             <FontAwesomeIcon icon={faQrcode} />
           </IconWrapper>
-          <CardTitle>Digital Wallet</CardTitle>
+          <CardTitle>Scan & Pay (UPI)</CardTitle>
           <CardContent>
-            Instant payments through UPI, Google Pay, PhonePe, and other digital wallets.
+            <p><strong>UPI ID:</strong> 41728775160@SBI</p>
+            <QRImage src="/src/assets/qr_code_rourkel.png" alt="QR Code" />
           </CardContent>
         </PaymentCard>
       </PaymentGrid>
 
-      <PaymentDetails className="animate-payment">
-        <DetailItem delay={0}><strong>Early Bird:</strong> ₹750/person (Till March 15, 2024)</DetailItem>
-        <DetailItem delay={1}><strong>Regular:</strong> ₹1000/person</DetailItem>
-        <DetailItem delay={2}><strong>Guest Pass:</strong> ₹500/additional person</DetailItem>
-        <DetailItem delay={3}><strong>* Deadline:</strong> May 15, 2025</DetailItem>
-      </PaymentDetails>
+      <CardContent className="animate-payment">
+        <p>Please contact the organizers if you want to pay in installments or one of the above methods does not work for you.</p>
+      </CardContent>
     </PaymentContainer>
-  )
-}
+  );
+};
 
-export default Payment
+export default Payment;
