@@ -5,15 +5,15 @@ import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
   :root {
-    --primary-color: #FFD700;
-    --secondary-color: #FFE55C;
+    --primary-color: #4bb1e1cc;
+    --secondary-color: #5193f6ff;
     --background-color: #1a1a1a;
     --surface-color: #2d2d2d;
-    --text-color: #f5f5f5;
+    --text-color: #f4f7f9ff;
     --overlay-color: rgba(0, 0, 0, 0.9);
-    --success-color: #4CAF50;
-    --error-color: #f44336;
-    --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+    --success-color: #7cda80ff;
+    --error-color: #fc6358ff;
+    --transition-timing: cubic-bezier(0.2, 0, 0.2, 1);
     --transition-duration: 0.3s;
   }
 

@@ -149,7 +149,7 @@ const Payment = () => {
 
       <EmailInstruction className="animate-payment">
         <FontAwesomeIcon icon={faEnvelope} />
-        <span>Send an email to <strong>recourkela1998@gmail.com</strong> with screenshot of your payment.</span>
+        <span>Send an email to <strong>nitry2k@gmail.com</strong> with screenshot of your payment.</span>
       </EmailInstruction>
 
       <PaymentGrid>
@@ -161,7 +161,7 @@ const Payment = () => {
           <CardTitle>Bank Transfer</CardTitle>
           <CardContent>
             <p><strong>Bank:</strong> State Bank of India</p>
-            <p><strong>Account Name:</strong> NIT Rourkela 1998 Alumni</p>
+            <p><strong>Account Name:</strong> NIT Rourkela 2000 Alumni</p>
             <p><strong>Account Number:</strong> 41728775160</p>
             <p><strong>IFSC:</strong> SBIN0002109</p>
             <p><strong>MICR:</strong> 769002007</p>

@@ -50,7 +50,7 @@ const Logo = styled.div`
   transition: all 0.3s ease;
   
   &:hover {
-    opacity: 0.9;
+    opacity: 0.5;
     transform: translateX(2px);
   }
 `
