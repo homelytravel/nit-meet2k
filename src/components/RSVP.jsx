@@ -252,8 +252,25 @@ const RSVP = () => {
               <tr><th>REGISTRATION Type</th><th>Charges</th></tr>
             </thead>
             <tbody>
-              <tr><td>Individual only (Without family)</td><td>₹25,000</td></tr>
-              <tr><td>Earlybird till 5th Aug (Without family)</td><td>₹22,000</td></tr>
+            Registration Fee:
+
+
+
+              <tr><td>
+                <div>
+                  Self 
+                  Spouse/Child - ₹5000
+                  (No charges for children less than 13 years)
+                </div>
+                </td><td>₹25,000</td></tr>
+              <tr><td>
+                <div>
+                Nostalgic Starter Discount
+                    💸 Discount Amount: ₹3,000
+                    🎯 Revised Registration Fee: 
+                    ⏳ Valid Until: August 5th, midnight IST
+                </div>
+                </td><td>₹25,000 → ₹22,000</td></tr>
               <tr><td>Additional guest (12+ years old), Per Head</td><td>₹5,000</td></tr>
             </tbody>
           </Table>
@@ -262,13 +279,13 @@ const RSVP = () => {
           </Caption>
           <Subtitle>The rsvp fee covers the following</Subtitle>
           <List>
-            <li>Food and non-alcoholic beverages for Dec 22nd evening through Dec 24th lunch.</li>
-            <li>Cultural and Entertainment activities for Dec 22nd and Dec 23rd.</li>
+            <li>Food and non-alcoholic beverages for Dec 25th evening through Dec 27th Breakfast.</li>
+            <li>Cultural and Entertainment activities for Dec 25th and Dec 26th.</li>
             <li>Stage setup, photography, party hall rental, music systems, orchestra, etc.</li>
             <li>Souvenirs and gifts for registered Alumni.</li>
             <li>Teacher felicitations, and other memorabilia.</li>
             <li>RSVP kit which includes lanyard with name tag, ID card for NITR campus visit, goodie bag and event itinerary.</li>
-            <li>Transportation and logistics to and from hotel to venue/NIT Rourkela from Dec 22nd through Dec 24th</li>
+            <li>Transportation and logistics to and from hotel to venue/NIT Rourkela from Dec 25th through Dec 26th</li>
           </List>
           <Disclaimer>The fee does not include accommodation.</Disclaimer>
         </LeftContent>
