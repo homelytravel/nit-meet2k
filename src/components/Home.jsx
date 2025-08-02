@@ -199,7 +199,7 @@ const Home = () => {
   })
 
   useEffect(() => {
-    const reunionDate = new Date('2025-12-26T00:00:00').getTime()
+    const reunionDate = new Date('2025-12-25T14:00:00').getTime()
 
     const timer = setInterval(() => {
       const now = new Date().getTime()

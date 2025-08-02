@@ -173,7 +173,7 @@ const WhenWhere = () => {
       <ContentContainer className="animate-element">
         <InfoSection delay={0.4} className="animate-element">
           <InfoTitle>When</InfoTitle>
-          <InfoText>Thursday, December 26th, 2025</InfoText>
+          <InfoText>Thursday, December 25th, 2025</InfoText>
           <InfoText>2:00 PM onwards</InfoText>
         </InfoSection>
 
