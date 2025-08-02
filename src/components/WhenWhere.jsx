@@ -187,10 +187,10 @@ const WhenWhere = () => {
         <InfoSection delay={0.8} className="animate-element">
           <InfoTitle>Schedule</InfoTitle>
           <ScheduleList>
-            <li><strong>Dec 26 (2 PM onwards):</strong> Meet & greet followed by dinner</li>
-            <li><strong>Dec 27 (Morning):</strong> Formal event at AV Hall (NITR) followed by lunch</li>
-            <li><strong>Dec 27 (Evening):</strong> Cultural evening & gala dinner at hotel ballroom</li>
-            <li><strong>Dec 28:</strong> Farewell breakfast & TBD</li>
+            <li><strong>Dec 25 (2 PM onwards):</strong> Meet & greet followed by dinner</li>
+            <li><strong>Dec 26 (Morning):</strong> Formal event at AV Hall (NITR) followed by lunch</li>
+            <li><strong>Dec 26 (Evening):</strong> Cultural evening & gala dinner at hotel ballroom</li>
+            <li><strong>Dec 27:</strong> Farewell breakfast & TBD</li>
           </ScheduleList>
         </InfoSection>
       </ContentContainer>
