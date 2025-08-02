@@ -172,10 +172,10 @@ const MemberRole = styled.p`
 
 const Contact = () => {
   const committeeMembers = [
-    { name: 'John Smith', role: 'Committee Chair' },
-    { name: 'Sarah Johnson', role: 'Event Coordinator' },
-    { name: 'Michael Brown', role: 'Treasurer' },
-    { name: 'Emily Davis', role: 'Communications' }
+    { name: 'TBA', role: 'Committee Chair' },
+    { name: 'TBA', role: 'Event Coordinator' },
+    { name: 'TBA', role: 'Treasurer' },
+    { name: 'TBA', role: 'Communications' }
   ]
 
   useEffect(() => {
@@ -205,7 +205,7 @@ const Contact = () => {
           </IconWrapper>
           <InfoText>
             <InfoTitle>Email</InfoTitle>
-            <InfoDetails>reunion2025@nitrourkela.ac.in</InfoDetails>
+            <InfoDetails>nitry2k@gmail.com</InfoDetails>
           </InfoText>
         </ContactInfo>
 
@@ -215,7 +215,7 @@ const Contact = () => {
           </IconWrapper>
           <InfoText>
             <InfoTitle>Phone</InfoTitle>
-            <InfoDetails>(+91) 123-4567</InfoDetails>
+            <InfoDetails>To be Published</InfoDetails>
           </InfoText>
         </ContactInfo>
 

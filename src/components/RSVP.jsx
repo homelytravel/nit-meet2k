@@ -236,7 +236,7 @@ const RSVP = () => {
   return (
     <RSVPContainer id="rsvp">
       <HeaderContent>
-        <Title>RSVP</Title>
+        <Title>REGISTRATION</Title>
         <Subtitle>
           Don’t miss the 2000 Silver Jubilee event! <strong>Register now</strong> to secure your spot and confirm your rsvp by making a payment.
         </Subtitle>
@@ -249,11 +249,12 @@ const RSVP = () => {
         <LeftContent>
           <Table>
             <thead>
-              <tr><th>RSVP Type</th><th>Charges</th></tr>
+              <tr><th>REGISTRATION Type</th><th>Charges</th></tr>
             </thead>
             <tbody>
-              <tr><td>Individual only (Without family)</td><td>₹23,000</td></tr>
-              <tr><td>With Family (Spouse + Kids)</td><td>₹30,000</td></tr>
+              <tr><td>Individual only (Without family)</td><td>₹25,000</td></tr>
+              <tr><td>Earlybird till 5th Aug (Without family)</td><td>₹22,000</td></tr>
+              <tr><td>Additional guest (12+ years old), Per Head</td><td>₹5,000</td></tr>
             </tbody>
           </Table>
           <Caption>

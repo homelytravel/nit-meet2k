@@ -161,11 +161,13 @@ const Payment = () => {
           <CardTitle>Bank Transfer</CardTitle>
           <CardContent>
             <p><strong>Bank:</strong> State Bank of India</p>
-            <p><strong>Account Name:</strong> NIT Rourkela 2000 Alumni</p>
-            <p><strong>Account Number:</strong> 41728775160</p>
+            <p><strong>Account Name:</strong> NITRAA</p>
+            <p><strong>Account Number:</strong> 44133183133</p>
             <p><strong>IFSC:</strong> SBIN0002109</p>
             <p><strong>MICR:</strong> 769002007</p>
+            <p><strong>SWIFT Code:</strong> SBININBB137</p>
             <p><strong>Branch Code:</strong> 002109</p>
+            <p><strong>Email Contact:</strong>nitry2k@gmail.com</p>
           </CardContent>
         </PaymentCard>
 
@@ -176,8 +178,8 @@ const Payment = () => {
           </IconWrapper>
           <CardTitle>Scan & Pay (UPI)</CardTitle>
           <CardContent>
-            <p><strong>UPI ID:</strong> 41728775160@SBI</p>
-            <QRImage src="/src/assets/qr_code_rourkel.png" alt="QR Code" />
+            <p><strong>UPI ID:</strong> 9692242766@SBI</p>
+            <QRImage src="https://drive.google.com/file/d/1CP21NBJpq2Bt912WabU0psvoKd5WQT2J/view?usp=drive_link" alt="QR Code" />
           </CardContent>
         </PaymentCard>
       </PaymentGrid>
