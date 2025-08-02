@@ -258,19 +258,19 @@ const RSVP = () => {
 
               <tr><td>
                 <div>
-                  Self 
-                  Spouse/Child - ₹5000
+                  Self <br />
+                  Spouse/Child - ₹5000 <br />
                   (No charges for children less than 13 years)
                 </div>
                 </td><td>₹25,000</td></tr>
               <tr><td>
                 <div>
-                Nostalgic Starter Discount
-                    💸 Discount Amount: ₹3,000
-                    🎯 Revised Registration Fee: 
+                Nostalgic Starter Discount<br />
+                    💸 Discount Amount: ₹3,000<br />
+                    🎯 Revised Registration Fee: <br />
                     ⏳ Valid Until: August 5th, midnight IST
                 </div>
-                </td><td>₹25,000 → ₹22,000</td></tr>
+                </td><td>₹22,000</td></tr>
               <tr><td>Additional guest (12+ years old), Per Head</td><td>₹5,000</td></tr>
             </tbody>
           </Table>
