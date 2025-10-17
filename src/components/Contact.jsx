@@ -234,7 +234,7 @@ const Contact = () => {
         </ContactInfo>
       </ContactContent>
 
-      <CommitteeMembers className="animate-on-scroll">
+      /* <CommitteeMembers className="animate-on-scroll">
         <CommitteeTitle>Reunion Committee</CommitteeTitle>
         <MembersList>
           {committeeMembers.map((member, index) => (
@@ -244,7 +244,7 @@ const Contact = () => {
             </MemberCard>
           ))}
         </MembersList>
-      </CommitteeMembers>
+      </CommitteeMembers> */
     </ContactContainer>
   )
 }

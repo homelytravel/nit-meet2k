@@ -240,9 +240,6 @@ const RSVP = () => {
         <Subtitle>
           Don’t miss the 2000 Silver Jubilee event! <strong>Register now</strong> to secure your spot and confirm your rsvp by making a payment.
         </Subtitle>
-        <Note>
-          We understand that plans can change. That’s why we offer a full refund if you need to cancel your rsvp until September 30th.
-        </Note>
       </HeaderContent>
 
       <ContentWrapper>
@@ -263,14 +260,7 @@ const RSVP = () => {
                   (No charges for children less than 13 years)
                 </div>
                 </td><td>₹25,000</td></tr>
-              <tr><td>
-                <div>
-                Nostalgic Starter Discount<br />
-                    💸 Discount Amount: ₹3,000<br />
-                    🎯 Revised Registration Fee: <br />
-                    ⏳ Valid Until: August 5th, midnight IST
-                </div>
-                </td><td>₹22,000</td></tr>
+              
               <tr><td>Additional guest (12+ years old), Per Head</td><td>₹5,000</td></tr>
             </tbody>
           </Table>

@@ -166,25 +166,15 @@ const Accommodation = () => {
     {
       id: 1,
       icon: faHotel,
-      title: 'Hotel Mayfair Rourkela',
+      title: 'Hotel Mayfair Worldcup Village',
       description: 'Luxurious accommodations with special alumni rates',
-      address: 'Panposh Road, Rourkela',
-      rate: '₹5000/night (Special Rate)',
+      address: 'Chhend, Rourkela',
+      rate: '₹3350/night (Special Rate)',
       phone: '+91 661 2400500',
       link: '#'
     },
     {
       id: 2,
-      icon: faBed,
-      title: 'Hotel Deepti',
-      description: 'Premium comfort near campus',
-      address: 'Civil Township, Rourkela',
-      rate: '₹3000/night',
-      phone: '+91 661 2400700',
-      link: '#'
-    },
-    {
-      id: 3,
       icon: faHouse,
       title: 'NIT Guest House',
       description: 'On-campus heritage accommodation',

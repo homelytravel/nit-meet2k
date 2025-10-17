@@ -179,8 +179,8 @@ const WhenWhere = () => {
 
         <InfoSection delay={0.6} className="animate-element">
           <InfoTitle>Where</InfoTitle>
-          <InfoText>NIT Rourkela Campus</InfoText>
-          <InfoText>Sector 1, Rourkela</InfoText>
+          <InfoText>Hotel Mayfair Worldcup Village</InfoText>
+          <InfoText>Chhend, Rourkela</InfoText>
           <InfoText>Odisha - 769008</InfoText>
         </InfoSection>
 
@@ -190,7 +190,7 @@ const WhenWhere = () => {
             <li><strong>Dec 25 (2 PM onwards):</strong> Meet & greet followed by dinner</li>
             <li><strong>Dec 26 (Morning):</strong> Formal event at AV Hall (NITR) followed by lunch</li>
             <li><strong>Dec 26 (Evening):</strong> Cultural evening & gala dinner at hotel ballroom</li>
-            <li><strong>Dec 27:</strong> Farewell breakfast & TBD</li>
+            <li><strong>Dec 27:</strong> Farewell Breakfast </li>
           </ScheduleList>
         </InfoSection>
       </ContentContainer>
