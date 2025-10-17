@@ -179,7 +179,7 @@ const Payment = () => {
           <CardTitle>Scan & Pay (UPI)</CardTitle>
           <CardContent>
             <p><strong>UPI ID:</strong> 9692242766@SBI</p>
-            <img src="https://drive.google.com/file/d/1kHb2pruGl4zSmeGwJUGFp0AySjKUqkdo/view?usp=sharing" alt="QR Code" />
+            <img src="https://drive.google.com/drive-viewer/AKGpiha5ku2MQ2_L-5xPb0S107RjiC3MYYCy90IGPYz_R8swwm82rKq3jJcoQqcsezfIkpR1CfEESA8mToosbzHaM7VsMzwReGSUmW8=s1600-rw-v1" alt="QR Code" />
           </CardContent>
         </PaymentCard>
       </PaymentGrid>
